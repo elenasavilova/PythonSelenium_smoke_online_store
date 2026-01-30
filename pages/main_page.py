@@ -16,33 +16,32 @@ class MainPage(BasePage):
     close_popup_button = "(//div[@class='popmechanic-close popmechanic-close-icon'])[1]"
 
     # Getters
-    def get_popup_close_button(self):
-        return WebDriverWait(self.driver, 120).until(element_to_be_clickable((By.XPATH, self.close_popup_button)))
-
     def get_header_menu_button(self):
-        return WebDriverWait(self.driver, 20).until(visibility_of_element_located((By.XPATH, self.header_menu_button)))
+        return WebDriverWait(self.driver, 30).until(element_to_be_clickable((By.XPATH, self.header_menu_button)))
 
     def get_menu_item_odezhda(self):
-        return WebDriverWait(self.driver, 20).until(visibility_of_element_located((By.XPATH, self.menu_item_odezhda)))
+        return WebDriverWait(self.driver, 30).until(element_to_be_clickable((By.XPATH, self.menu_item_odezhda)))
 
     def get_menu_item_smotret_vse(self):
-        return WebDriverWait(self.driver, 10).until(visibility_of_element_located((By.XPATH, self.menu_item_smotret_vse)))
+        return WebDriverWait(self.driver, 30).until(element_to_be_clickable((By.XPATH, self.menu_item_smotret_vse)))
 
 
     # Actions
 
     def close_popup(self):
         try:
-            self.get_popup_close_button().click()
+            WebDriverWait(self.driver, 120).until(
+                element_to_be_clickable((By.XPATH, self.close_popup_button))
+            ).click()
             print("Close popup")
         except TimeoutException:
-            print("Element is not found")
+            print("Popup is not found")
 
     def hover_header_menu_button(self):
         ActionChains(self.driver).move_to_element(self.get_header_menu_button()).perform()
         print("Hover the header menu button")
 
-    def hover_odezhda_menu_tem(self):
+    def hover_odezhda_menu_item(self):
         ActionChains(self.driver).move_to_element(self.get_menu_item_odezhda()).perform()
         print("Hover 'Одежда' menu item")
 
@@ -51,11 +50,12 @@ class MainPage(BasePage):
         print("Hover 'Смотреть все' menu item and click")
 
     # Methods
-    def select_smotret_vse(self):
+    def open_main_page(self):
         self.open_page(self.base_url)
+    def select_smotret_vse(self):
         self.close_popup()
         self.hover_header_menu_button()
-        self.hover_odezhda_menu_tem()
+        self.hover_odezhda_menu_item()
         self.smotret_vse_click()
 
 
